@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+
+int main (void) {
+  char buffer[512];
+
+  fgets(buffer, sizeof(buffer), stdin);
+
+  while (*buffer != 'q') {
+    printf("%s", buffer);
+    fgets(buffer, sizeof(buffer), stdin);
+  }
+
+  return 0;
+}

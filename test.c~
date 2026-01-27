@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <string.h>
+
+void exitShell (void) {
+  printf("exiting...");
+  exit(1);
+}
+
+void splitstring(char* buffer,char delims[]) {
+  char* token = malloc(sizeof(char) * 512)
+  token = strtok(buffer,delims);
+  printf("token: %s", token);
+
+  while(token != NULL){
+    printf("%s\n", token);
+
+    printf("> ");
+    
+    token = strtok(NULL, delims);
+  }
+  
+  return ;
+}
+
+int main (void) {
+  char* buffer = malloc(sizeof(char) * 512);
+  
+  char delims[] = " \t|><&;";
+  fgets(buffer, sizeof(buffer), stdin);
+  while (*buffer != 'q') {
+    splitstring(buffer, delims);
+    fgets(buffer, sizeof(buffer), stdin);
+  }
+
+  return 0;
+}

@@ -7,12 +7,12 @@
 int main (void) {
   char buffer[512];
 
-  printf("> ");
+  printf(">");
+  
   fgets(buffer, sizeof(buffer), stdin);
 
   while (*buffer != 'q') {
     printf("%s", buffer);
-    printf("> ");
     fgets(buffer, sizeof(buffer), stdin);
   }
 

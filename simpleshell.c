@@ -18,17 +18,22 @@ void splitstring(char buffer[],char delims[]) {
 }
 
 int main (void) {
-  char buffer[512];
+  char* buffer = malloc(sizeof(char) * 512);
   char delims[] = " \t|><&;";
   printf("> ");
   fgets(buffer, sizeof(buffer), stdin);
+  buffer[strcspn(buffer, "\n")] = 0; // deletes new line
   
-  
-  while (*buffer != 'q') {
+  while (strcmp(buffer, "exit") != 0 && fgets(buffer, sizeof(buffer), stdin) != NULL) {
     splitstring(buffer, delims);
+    printf("%s\n", buffer);
     printf("> ");
     fgets(buffer, sizeof(buffer), stdin);
+    buffer[strcspn(buffer, "\n")] = 0;
   }
+  
+  free(buffer);
+  buffer = NULL;
 
   return 0;
 }

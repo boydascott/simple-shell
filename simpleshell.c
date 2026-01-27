@@ -6,11 +6,13 @@
 #include <string.h>
 
 void exitShell (void);
-void parseInput(char buffer[]);
+void parseInput(char buffer[], char** ptr);
 
 int main (void) {
-  char buffer[512] = "0";
+  char buffer[512];
   char* output = "0";
+  char** parsed;
+  parsed = malloc(sizeof(char*) * 256);
 
   do {
     // Display promt
@@ -19,12 +21,28 @@ int main (void) {
     // Read + Parse input
     output = fgets(buffer, sizeof(buffer), stdin);
     
-    if (strcmp(buffer, "0") != 0) {
-      parseInput(buffer);
+    if (strcmp(buffer, "0") != 0 && output != NULL) {
+      parseInput(buffer, parsed);
+
+      int n = 0;
+
+      // prints array of parsed strings
+      while (*(parsed+n) != NULL) {
+	printf("parsed: %s\n", parsed[n]);
+	n++;
+      }
     }
   }
-  while (output && strcmp(output, "exit"));
-	 
+  while (output && strcmp(parsed[0], "exit")); // exits while loop if output is NULL or buffer == exit
+
+
+  // memory management
+  free(output);
+  output = NULL;
+  free(parsed);
+  parsed = NULL;
+  
+  // cleanly exit shell
   exitShell();
 
   return 0;
@@ -35,15 +53,19 @@ void exitShell (void) {
   exit(0);
 }
 
-void parseInput(char buffer[]) {
+void parseInput(char buffer[], char** ptr) {
   buffer[strcspn(buffer, "\n")] = 0;
   char delims[] = " \t|><&;";
+  int i = 0;
   
   char* token = strtok(buffer,delims);
 
   while(token != NULL){
+    ptr[i] = token;
     printf("%s\n", token);
+    printf("ptr at %d: %s\n", i, ptr[i]);
 
     token = strtok(NULL, delims);
-  }
+    i++;
+  }  
 }

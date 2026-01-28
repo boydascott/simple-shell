@@ -6,24 +6,24 @@
 #include <string.h>
 
 void exitShell (void);
-void parseInput(char buffer[], char** ptr);
+char** parseInput(char buffer[]);
 
 int main (void) {
   char buffer[513];
   char* output = "";
-  char** parsed;
-  parsed = malloc(sizeof(char*) * 512);
-  parsed[0] = ""; // will segfault if not initialised because strcmp(NULL, "exit") this fixes for now :D
-
+  char** parsed = malloc(sizeof(char*) * 1);
+  parsed[0] = "";
+  
   do {
-    // Display promt
+    
+    // Display prompt
     printf("> ");
     
     // Read + Parse input
     output = fgets(buffer, sizeof(buffer), stdin);
     
     if (strcmp(buffer, "0") != 0 && output != NULL) {
-      parseInput(buffer, parsed);
+      parsed = parseInput(buffer);
 
       int n = 0;
 
@@ -36,10 +36,10 @@ int main (void) {
   }
   while (output && strcmp(parsed[0], "exit")); // exits while loop if output is NULL or buffer == exit
 
-
-  // memory management
   free(parsed);
   parsed = NULL;
+
+  // memory management
   
   // cleanly exit shell
   exitShell();
@@ -52,7 +52,9 @@ void exitShell (void) {
   exit(0);
 }
 
-void parseInput(char buffer[], char** ptr) {
+char** parseInput(char buffer[]) {
+  char** ptr;
+  ptr = malloc(sizeof(char*) * 512);
   buffer[strcspn(buffer, "\n")] = 0;
   char delims[] = " \t|><&;";
   int i = 0;
@@ -66,5 +68,7 @@ void parseInput(char buffer[], char** ptr) {
 
     token = strtok(NULL, delims);
     i++;
-  }  
+  }
+
+  return ptr;
 }

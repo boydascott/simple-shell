@@ -9,10 +9,11 @@ void exitShell (void);
 void parseInput(char buffer[], char** ptr);
 
 int main (void) {
-  char buffer[512];
-  char* output = "0";
+  char buffer[513];
+  char* output = "";
   char** parsed;
-  parsed = malloc(sizeof(char*) * 256);
+  parsed = malloc(sizeof(char*) * 512);
+  parsed[0] = ""; // will segfault if not initialised because strcmp(NULL, "exit") this fixes for now :D
 
   do {
     // Display promt
@@ -37,8 +38,6 @@ int main (void) {
 
 
   // memory management
-  free(output);
-  output = NULL;
   free(parsed);
   parsed = NULL;
   
@@ -48,7 +47,7 @@ int main (void) {
   return 0;
 }
 
-void exitShell (void) {
+void exitShell (void) {  
   printf("exiting...");
   exit(0);
 }

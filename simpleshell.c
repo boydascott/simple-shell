@@ -1,34 +1,41 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/types.h>
+#include <stdio.h>
 #include <string.h>
+#include "shellfunc.h"
 
-void splitstring(char buffer[],char delims[]) {  
-  char* token = strtok(buffer,delims);
-
-     while(token != NULL){
-          printf("%s\n", token);
-
-          token = strtok(NULL, delims);
-     }
-  
-  return ;
-}
 
 int main (void) {
-  char buffer[512];
-  char delims[] = " \t|><&;";
-  printf("> ");
-  fgets(buffer, sizeof(buffer), stdin);
+  char buffer[513];
+  char* output = "";
+  char** parsed = malloc(sizeof(char*) * 50);
+  char* builtIn = "cd getpath setpath history ! !! !- alias unalias exit";
+  parsed[0] = "";
+
+  loadEnvironment();
   
-  
-  while (*buffer != 'q') {
-    splitstring(buffer, delims);
+  do {
+    // Display prompt
     printf("> ");
-    fgets(buffer, sizeof(buffer), stdin);
-  }
+    
+    // Read + Parse input
+    output = fgets(buffer, sizeof(buffer), stdin);
+
+    parsed = parseInput(buffer);
+    
+    if (strstr(builtIn, parsed[0])) {
+      ;
+    } else {
+      execute(parsed);
+    }    
+  } while (output && strcmp(parsed[0], "exit")); // exits while loop if output is NULL or buffer == exit
+
+  // memory management
+  free(parsed);
+  parsed = NULL;
+  
+  
+  // cleanly exit shell
+  exitShell();
 
   return 0;
 }

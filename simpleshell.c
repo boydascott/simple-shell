@@ -7,10 +7,9 @@
 int main (void) {
   char buffer[513];
   char* output = "";
-  char** parsed = malloc(sizeof(char*) * 50);
   char* builtIn = "cd getpath setpath history ! !! !- alias unalias exit";
-  parsed[0] = "";
-
+  char** parsed;
+  
   loadEnvironment();
   
   do {

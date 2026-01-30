@@ -28,9 +28,13 @@ int main (void) {
       int n = 0;
 
       // prints array of parsed strings
-      while (*(parsed+n) != NULL) {
-	printf("parsed: %s\n", parsed[n]);
-	n++;
+      //while (*(parsed+n) != NULL) {
+      //printf("parsed: %s\n", parsed[n]);
+      //n++;
+      //}
+
+      if (parsed[0] == NULL) {
+	parsed[0] = "";
       }
     }
   }
@@ -54,7 +58,7 @@ void exitShell (void) {
 
 char** parseInput(char buffer[]) {
   char** ptr;
-  ptr = malloc(sizeof(char*) * 512);
+  ptr = malloc(sizeof(char*) * 50);
   buffer[strcspn(buffer, "\n")] = 0;
   char delims[] = " \t|><&;";
   int i = 0;
@@ -64,7 +68,6 @@ char** parseInput(char buffer[]) {
   while(token != NULL){
     ptr[i] = token;
     printf("%s\n", token);
-    printf("ptr at %d: %s\n", i, ptr[i]);
 
     token = strtok(NULL, delims);
     i++;

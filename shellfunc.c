@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <string.h>
-
+#include <shellfunc.h>
 
 
 

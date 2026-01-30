@@ -32,10 +32,6 @@ int main (void) {
       //printf("parsed: %s\n", parsed[n]);
       //n++;
       //}
-
-      if (parsed[0] == NULL) {
-	parsed[0] = "";
-      }
     }
   }
   while (output && strcmp(parsed[0], "exit")); // exits while loop if output is NULL or buffer == exit
@@ -73,5 +69,9 @@ char** parseInput(char buffer[]) {
     i++;
   }
 
+  if (ptr[0] == NULL) {
+    ptr[0] = "";
+  }
+  
   return ptr;
 }

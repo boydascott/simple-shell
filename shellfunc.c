@@ -6,9 +6,8 @@
 #include <string.h>
 #include "shellfunc.h"
 
-void exitShell (void) {  
-  printf("exiting...\n");
-  exit(0);
+void loadEnvironment () {
+  printf("Loading environment...\n");
 }
 
 char** parseInput(char buffer[]) {
@@ -34,10 +33,6 @@ char** parseInput(char buffer[]) {
   return token;
 }
 
-void loadEnvironment () {
-  printf("Loading environment...\n");
-}
-
 void execute (char* args[]) {
   pid_t p = fork(); // gets the id of child process, parent process > 0, child will always be 0, error is -1
 
@@ -50,4 +45,32 @@ void execute (char* args[]) {
   } else { // error
     printf("Something went wrong\n");
   }
+}
+
+void executeBuiltIn (char* args[]) {
+
+  // for purposes of testing for part 3 only get path and set path in the cmds 
+  //  char* cmds[] = {"cd", "getpath", "setpath", "history", "!", "!!", "!-", "alias", "unalias", "exit"}; dont edit or delete even tho commented makes things slightly easier later
+  char* cmds[] = { "getpath", "setpath" };
+  
+  void (*builtIns[2])() = { getPath, setPath };
+  
+  for (int i = 0; i < 2; i++) {
+    if (strcmp(args[0], cmds[i]) == 0) {
+      builtIns[i]();
+    }
+  }
+}
+
+void getPath () {
+  printf("getPath placeholder\n");
+}
+
+void setPath () {
+  printf("setPath placeholder\n");
+}
+
+void exitShell () {  
+  printf("exiting...\n");
+  exit(0);
 }

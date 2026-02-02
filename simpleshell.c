@@ -7,7 +7,7 @@
 int main (void) {
   char buffer[513];
   char* output = "";
-  char* builtIn = "cd getpath setpath history ! !! !- alias unalias exit";
+  char* builtIn = "cd getpath setpath history ! !! !- alias unalias";
   char** parsed;
   
   loadEnvironment();
@@ -21,12 +21,12 @@ int main (void) {
 
     parsed = parseInput(buffer);
     
-    if (strstr(builtIn, parsed[0]) || parsed) {
-      ;
+    if (strstr(builtIn, parsed[0]) || !output || strcmp(parsed[0], "exit") == 0) {
+      executeBuiltIn(parsed);
     } else {
       execute(parsed);
     }    
-  } while (output && strcmp(parsed[0], "exit")); // exits while loop if output is NULL or buffer == exit
+  } while (output && strcmp(parsed[0], "exit") != 0); // exits while loop if output is NULL or buffer == exit
 
   // memory management
   free(parsed);

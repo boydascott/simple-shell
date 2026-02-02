@@ -1,7 +1,13 @@
-void exitShell (void);
+void loadEnvironment ();
 
 char** parseInput(char buffer[]);
 
-void loadEnvironment();
-
 void execute (char* args[]);
+
+void executeBuiltIn (char* args[]);
+
+void getPath ();
+
+void setPath ();
+
+void exitShell ();

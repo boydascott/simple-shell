@@ -48,14 +48,11 @@ void execute (char* args[]) {
 }
 
 void executeBuiltIn (char* args[]) {
-
-  // for purposes of testing for part 3 only get path and set path in the cmds 
-  //  char* cmds[] = {"cd", "getpath", "setpath", "history", "!", "!!", "!-", "alias", "unalias", "exit"}; dont edit or delete even tho commented makes things slightly easier later
-  char* cmds[] = { "getpath", "setpath" };
+  char* cmds[] = { "cd", "getpath", "setpath" };
   
-  void (*builtIns[2])() = { getPath, setPath };
+  void (*builtIns[])() = { cd, getPath, setPath };
   
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
       builtIns[i]();
     }
@@ -68,6 +65,10 @@ void getPath () {
 
 void setPath () {
   printf("setPath placeholder\n");
+}
+
+void cd () {
+  printf("cd placeholder\n");
 }
 
 void exitShell () {  

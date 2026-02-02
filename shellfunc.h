@@ -10,4 +10,6 @@ void getPath ();
 
 void setPath ();
 
+void cd ();
+
 void exitShell ();

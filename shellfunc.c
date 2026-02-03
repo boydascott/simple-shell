@@ -72,10 +72,10 @@ void cd (char* args[]) { // cd command, changes working directory
   char* home = getenv("HOME");
   // if the input directory is empty, set working directory to home variable. 
   if (args[1] == NULL) chdir(home);
-  // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
-  else if (chdir(args[1]) != 0) perror("Failed to change directory");
   // checks case of user entering two paths, prints error.
   else if (args[2]) printf ("Too many arguments \n");
+  // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
+  else if (chdir(args[1]) != 0) perror("Failed to change directory");
 }
 
 void exitShell () {  

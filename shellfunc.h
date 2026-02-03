@@ -6,10 +6,10 @@ void execute (char* args[]);
 
 void executeBuiltIn (char* args[]);
 
-void getPath ();
+void getPath (char* args[]);
 
-void setPath ();
+void setPath (char* args[]);
 
-void cd ();
+void cd (char* args[]);
 
 void exitShell ();

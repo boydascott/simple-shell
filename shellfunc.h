@@ -1,4 +1,4 @@
-void loadEnvironment ();
+char* loadEnvironment ();
 
 char** parseInput(char buffer[]);
 
@@ -12,4 +12,4 @@ void setPath (char* args[]);
 
 void cd (char* args[]);
 
-void exitShell ();
+void exitShell (char* path);

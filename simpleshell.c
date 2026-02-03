@@ -10,7 +10,7 @@ int main (void) {
   char* builtIn = "cd getpath setpath history ! !! !- alias unalias";
   char** parsed;
   
-  loadEnvironment();
+  char* path = loadEnvironment();
   
   do {
     // Display prompt
@@ -34,7 +34,7 @@ int main (void) {
   
   
   // cleanly exit shell
-  exitShell();
+  exitShell(path);
 
   return 0;
 }

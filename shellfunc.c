@@ -6,8 +6,12 @@
 #include <string.h>
 #include "shellfunc.h"
 
-void loadEnvironment () {
+char* loadEnvironment () {
   printf("Loading environment...\n");
+  char* path = getenv("PATH");
+  char* home = getenv("HOME");
+  chdir(home);
+  return path;
 }
 
 char** parseInput(char buffer[]) {
@@ -60,25 +64,45 @@ void executeBuiltIn (char* args[]) {
 }
 
 void getPath (char* args[]) {
-  printf("getPath placeholder\n");
+  if (args[1]) {
+    printf("Error: Too many parameters, none are required\n");
+  } else {
+    printf("%s\n", getenv("PATH"));
+  }
 }
 
 void setPath (char* args[]) {
-  printf("setPath placeholder\n");
+  if (args[1] == NULL) {
+    printf("Error: No parameter provided, please enter a path\n");
+  } else if (args[2]) {
+    printf("Error: Too many parameters, please only enter one\n");
+  } else {
+    setenv("PATH", args[1], 1);
+  }
 }
 
 void cd (char* args[]) { // cd command, changes working directory
+  
   // create home variable using getenv, this is the user's home path.
   char* home = getenv("HOME");
+  
   // if the input directory is empty, set working directory to home variable. 
-  if (args[1] == NULL) chdir(home);
+  if {
+    (args[1] == NULL) chdir(home);
+  }
   // checks case of user entering two paths, prints error.
-  else if (args[2]) printf ("Too many arguments \n");
+  else if {
+    (args[2]) printf ("Too many arguments \n");
+  }
   // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
-  else if (chdir(args[1]) != 0) perror(args[1]);
+  else if (chdir(args[1]) != 0) {
+    perror(args[1]);
+  }
 }
 
-void exitShell () {  
+void exitShell (char* path) {
+  setenv("PATH", path, 1);
+  printf("%s\n", getenv("PATH"));
   printf("exiting...\n");
   exit(0);
 }

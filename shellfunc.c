@@ -6,8 +6,12 @@
 #include <string.h>
 #include "shellfunc.h"
 
-void loadEnvironment () {
+char* loadEnvironment () {
   printf("Loading environment...\n");
+  char* path = getenv("PATH");
+  char* home = getenv("HOME");
+  chdir(home);
+  return path;
 }
 
 char** parseInput(char buffer[]) {
@@ -50,28 +54,40 @@ void execute (char* args[]) {
 void executeBuiltIn (char* args[]) {
   char* cmds[] = { "cd", "getpath", "setpath" };
   
-  void (*builtIns[])() = { cd, getPath, setPath };
+  void (*builtIns[])(char**) = { cd, getPath, setPath };
   
   for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
-      builtIns[i]();
+      builtIns[i](args);
     }
   }
 }
 
-void getPath () {
-  printf("getPath placeholder\n");
+void getPath (char* args[]) {
+  if (args[1]) {
+    printf("Error: Too many parameters, none are required\n");
+  } else {
+    printf("%s\n", getenv("PATH"));
+  }
 }
 
-void setPath () {
-  printf("setPath placeholder\n");
+void setPath (char* args[]) {
+  if (args[1] == NULL) {
+    printf("Error: No parameter provided, please enter a path\n");
+  } else if (args[2]) {
+    printf("Error: Too many parameters, please only enter one\n");
+  } else {
+    setenv("PATH", args[1], 1);
+  }
 }
 
-void cd () {
+void cd (char* args[]) {
   printf("cd placeholder\n");
 }
 
-void exitShell () {  
+void exitShell (char* path) {
+  setenv("PATH", path, 1);
+  printf("%s\n", getenv("PATH"));
   printf("exiting...\n");
   exit(0);
 }

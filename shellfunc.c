@@ -81,8 +81,23 @@ void setPath (char* args[]) {
   }
 }
 
-void cd (char* args[]) {
-  printf("cd placeholder\n");
+void cd (char* args[]) { // cd command, changes working directory
+  
+  // create home variable using getenv, this is the user's home path.
+  char* home = getenv("HOME");
+  
+  // if the input directory is empty, set working directory to home variable. 
+  if {
+    (args[1] == NULL) chdir(home);
+  }
+  // checks case of user entering two paths, prints error.
+  else if {
+    (args[2]) printf ("Too many arguments \n");
+  }
+  // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
+  else if (chdir(args[1]) != 0) {
+    perror(args[1]);
+  }
 }
 
 void exitShell (char* path) {

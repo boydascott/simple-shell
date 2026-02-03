@@ -75,7 +75,7 @@ void cd (char* args[]) { // cd command, changes working directory
   // checks case of user entering two paths, prints error.
   else if (args[2]) printf ("Too many arguments \n");
   // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
-  else if (chdir(args[1]) != 0) perror("Failed to change directory");
+  else if (chdir(args[1]) != 0) perror(args[1]);
 }
 
 void exitShell () {  

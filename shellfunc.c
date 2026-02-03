@@ -50,25 +50,34 @@ void execute (char* args[]) {
 void executeBuiltIn (char* args[]) {
   char* cmds[] = { "cd", "getpath", "setpath" };
   
-  void (*builtIns[])() = { cd, getPath, setPath };
+  void (*builtIns[])(char**) = { cd, getPath, setPath };
   
   for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
-      builtIns[i]();
+      builtIns[i](args);
     }
   }
 }
 
-void getPath () {
+void getPath (char* args[]) {
   printf("getPath placeholder\n");
 }
 
-void setPath () {
+void setPath (char* args[]) {
   printf("setPath placeholder\n");
 }
 
-void cd () {
-  printf("cd placeholder\n");
+void cd (char* args[]) {
+  /* cd command has two forms, in the first form there are no parameters and this
+     changes the working directory to the user's home directory. In the second form,
+     it has one paramater, a directory, and changes the working directory to said
+     parameter. If directory doesn't exist, perror() saying there is no such directory.
+     chdir() used to change directory, '.' is current dir, and '..' is parent dir.   */
+  
+  //home dir is getenv("HOME")
+  char* home = getenv("HOME");
+  if (args[1] == NULL) chdir(home);
+  else if (chdir(args[1]) != 0) perror("Failed to change directory");
 }
 
 void exitShell () {  

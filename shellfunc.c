@@ -67,16 +67,12 @@ void setPath (char* args[]) {
   printf("setPath placeholder\n");
 }
 
-void cd (char* args[]) {
-  /* cd command has two forms, in the first form there are no parameters and this
-     changes the working directory to the user's home directory. In the second form,
-     it has one paramater, a directory, and changes the working directory to said
-     parameter. If directory doesn't exist, perror() saying there is no such directory.
-     chdir() used to change directory, '.' is current dir, and '..' is parent dir.   */
-  
-  //home dir is getenv("HOME")
+void cd (char* args[]) { // cd command, changes working directory
+  // create home variable using getenv, this is the user's home path.
   char* home = getenv("HOME");
+  // if the input directory is empty, set working directory to home variable. 
   if (args[1] == NULL) chdir(home);
+  // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
   else if (chdir(args[1]) != 0) perror("Failed to change directory");
 }
 

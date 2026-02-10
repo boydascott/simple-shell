@@ -63,6 +63,7 @@ void executeBuiltIn (char* args[]) {
   }
 }
 
+// Prints whats stored in PATH
 void getPath (char* args[]) {
   if (args[1]) {
     printf("Error: Too many parameters, none are required\n");
@@ -71,33 +72,30 @@ void getPath (char* args[]) {
   }
 }
 
+// overwrites what stored in PATH with users input
 void setPath (char* args[]) {
   if (args[1] == NULL) {
     printf("Error: No parameter provided, please enter a path\n");
   } else if (args[2]) {
     printf("Error: Too many parameters, please only enter one\n");
   } else {
-    setenv("PATH", args[1], 1);
+    setenv("PATH", args[1], 1); 
   }
 }
 
-void cd (char* args[]) { // cd command, changes working directory
-  
+// cd command, changes working directory
+void cd (char* args[]) { 
   // create home variable using getenv, this is the user's home path.
   char* home = getenv("HOME");
   
   // if the input directory is empty, set working directory to home variable. 
-  if {
-    (args[1] == NULL) chdir(home);
-  }
+  if (args[1] == NULL) chdir(home);
+  
   // checks case of user entering two paths, prints error.
-  else if {
-    (args[2]) printf ("Too many arguments \n");
-  }
+  else if (args[2]) printf ("Too many arguments \n");
+  
   // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
-  else if (chdir(args[1]) != 0) {
-    perror(args[1]);
-  }
+  else if (chdir(args[1]) != 0) perror(args[1]);
 }
 
 void exitShell (char* path) {

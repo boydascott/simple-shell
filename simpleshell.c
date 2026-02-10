@@ -21,7 +21,7 @@ int main (void) {
 
     parsed = parseInput(buffer);
     
-    if (strstr(builtIn, parsed[0]) || !output || strcmp(parsed[0], "exit") == 0) {
+    if (strstr(builtIn, parsed[0]) || strcspn("!", parsed[0]) == 0 || !output || strcmp(parsed[0], "exit") == 0) {
       executeBuiltIn(parsed);
     } else {
       execute(parsed);

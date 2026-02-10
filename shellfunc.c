@@ -11,7 +11,7 @@ char* loadEnvironment () {
   char* path = getenv("PATH");
   char* home = getenv("HOME");
   chdir(home);
-  char* almap[9][9];
+  char* almap[2][9];
   return path;
 }
 

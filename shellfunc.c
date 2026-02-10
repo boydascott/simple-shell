@@ -11,6 +11,7 @@ char* loadEnvironment () {
   char* path = getenv("PATH");
   char* home = getenv("HOME");
   chdir(home);
+  char* almap[9][9];
   return path;
 }
 
@@ -96,6 +97,20 @@ void cd (char* args[]) {
   
   // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
   else if (chdir(args[1]) != 0) perror(args[1]);
+}
+
+void alias (char* args[]){
+     
+
+     char* almap[1][1] =  {{args[1]}, {args[2]}};
+     
+     printf(" hello %s\n" ,almap[1][1]);     
+
+     
+}
+
+void unalias (char* args[]){
+     printf("temp");
 }
 
 void exitShell (char* path) {

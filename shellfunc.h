@@ -12,4 +12,8 @@ void setPath (char* args[]);
 
 void cd (char* args[]);
 
+void alias (char* args[]);
+
+void unalias (char* args[]);
+
 void exitShell (char* path);

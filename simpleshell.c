@@ -7,7 +7,7 @@
 int main (void) {
   char buffer[513];
   char* output = "";
-  char* builtIn = "cd getpath setpath history ! !! !- alias unalias";
+  char* builtIn = "cd getpath setpath history alias unalias";
   char** parsed;
   
   char* path = loadEnvironment();
@@ -21,8 +21,10 @@ int main (void) {
 
     parsed = parseInput(buffer);
     
-    if (strstr(builtIn, parsed[0]) || strcspn("!", parsed[0]) == 0 || !output || strcmp(parsed[0], "exit") == 0) {
+    if (strstr(builtIn, parsed[0]) || !output || strcmp(parsed[0], "exit") == 0) {
       executeBuiltIn(parsed);
+    } else if (strcspn("!", parsed[0]) == 0) {
+      history(parsed[0]);
     } else {
       execute(parsed);
     }    

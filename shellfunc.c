@@ -52,9 +52,9 @@ void execute (char* args[]) {
 }
 
 void executeBuiltIn (char* args[]) {
-  char* cmds[] = { "cd", "getpath", "setpath" };
+  char* cmds[] = { "cd", "getpath", "setpath", "history", "!"};
   
-  void (*builtIns[])(char**) = { cd, getPath, setPath };
+  void (*builtIns[])(char**) = { cd, getPath, setPath, listHistory };
   
   for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
@@ -96,6 +96,30 @@ void cd (char* args[]) {
   
   // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
   else if (chdir(args[1]) != 0) perror(args[1]);
+}
+
+void history (char* arg) {
+  // !5 = get command 5, !-5 get command 15, !! get last used command
+  // strcmp (!5, x) < n < strcmp(!5, 20)
+  // 
+  
+  int n = 0;
+
+  if (strlen(arg) == 2) {
+    n = arg[1] - '0';
+  } else if (strlen(arg) == 3) {
+    n = (arg[1]-'0') * 10 + (arg[2]-'0');
+  }
+
+  printf("%d\n", n);
+
+  if (n < 1 || n > 20) {
+    printf("Error: History must be from 1 to 20\n");
+  }
+}
+
+void listHistory (char* args[]) {
+  printf("nothing\n");
 }
 
 void exitShell (char* path) {

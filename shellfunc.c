@@ -98,6 +98,29 @@ void cd (char* args[]) {
   else if (chdir(args[1]) != 0) perror(args[1]);
 }
 
+char* history (char* arg, char* hist[]) {
+  int n = 0;
+  
+  if (strlen(arg) == 2) {
+    n = arg[1] - '0';
+  } else if (strlen(arg) == 3) {
+    n = (arg[1]-'0') * 10 + (arg[2]-'0');
+  }
+  
+  if (n < 1 || n > 20) {
+    printf("Error: History must be from 1 to 20\n");
+  }
+  else {
+    return hist[n-1];
+  }
+  
+  return "exit";
+}
+
+void listHistory (char* args[]) {
+  printf("nothing\n");
+}
+
 void exitShell (char* path) {
   setenv("PATH", path, 1);
   printf("%s\n", getenv("PATH"));

@@ -9,6 +9,7 @@ int main (void) {
   char* output = "";
   char* builtIn = "cd getpath setpath history ! !! !- alias unalias";
   char** parsed;
+  char* hist[] = { "cd", "echo hello world!", "ls", "ls -1F", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" } ;
   
   char* path = loadEnvironment();
   
@@ -21,7 +22,15 @@ int main (void) {
 
     parsed = parseInput(buffer);
     
-    if (strstr(builtIn, parsed[0]) || strcspn("!", parsed[0]) == 0 || !output || strcmp(parsed[0], "exit") == 0) {
+    if (strcspn("!", parsed[0]) == 0) {
+    	strcpy(buffer, history(parsed[0], hist));
+    	parsed = parseInput(buffer);
+    	printf("%s\n", parsed[0]);
+    }
+    
+    
+    
+    if (strstr(builtIn, parsed[0]) || !output || strcmp(parsed[0], "exit") == 0) {
       executeBuiltIn(parsed);
     } else {
       execute(parsed);

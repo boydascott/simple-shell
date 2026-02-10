@@ -12,4 +12,8 @@ void setPath (char* args[]);
 
 void cd (char* args[]);
 
+char* history (char* arg, char* hist[]);
+
+void listHistory (char* args[]);
+
 void exitShell (char* path);

@@ -5,11 +5,16 @@
 
 
 int main (void) {
-  char buffer[513];
+  char buffer[512];
   char* output = "";
-  char* builtIn = "cd getpath setpath history ! !! !- alias unalias";
+  char* builtIn = "cd getpath setpath alias unalias history";
   char** parsed;
-  char* hist[] = { "cd", "echo hello world!", "ls", "ls -1F", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" } ;
+  char** hist = malloc(sizeof(char*) * 20);
+  int cmdSaved = 0;
+
+  for (int i = 0; i < 20; i++) {
+    hist[i] = malloc(sizeof(char)*512);
+  }
   
   char* path = loadEnvironment();
   
@@ -19,19 +24,28 @@ int main (void) {
     
     // Read + Parse input
     output = fgets(buffer, sizeof(buffer), stdin);
+    buffer[strcspn(buffer, "\n")] = 0;
 
     parsed = parseInput(buffer);
     
     if (strcspn("!", parsed[0]) == 0) {
-    	strcpy(buffer, history(parsed[0], hist));
-    	parsed = parseInput(buffer);
-    	printf("%s\n", parsed[0]);
+      strcpy(buffer, invokeHistory(parsed[0], hist));
+      parsed = parseInput(buffer);
+    } else {
+      int i = 0;
+      char cmd[512] = {};
+      
+      while (parsed[i]) {
+	strcat(cmd, parsed[i]);
+	strcat(cmd, " ");
+	i++;
+      }
+      strcpy(hist[cmdSaved], cmd);
+      cmdSaved = (cmdSaved + 1) % 20;
     }
     
-    
-    
     if (strstr(builtIn, parsed[0]) || !output || strcmp(parsed[0], "exit") == 0) {
-      executeBuiltIn(parsed);
+      executeBuiltIn(parsed, hist);
     } else {
       execute(parsed);
     }    

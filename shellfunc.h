@@ -4,7 +4,7 @@ char** parseInput(char buffer[]);
 
 void execute (char* args[]);
 
-void executeBuiltIn (char* args[]);
+void executeBuiltIn (char* args[], char* history[]);
 
 void getPath (char* args[]);
 
@@ -12,8 +12,8 @@ void setPath (char* args[]);
 
 void cd (char* args[]);
 
-char* history (char* arg, char* hist[]);
+char* invokeHistory (char* arg, char* hist[]);
 
-void listHistory (char* args[]);
+void listHistory (char* args[], char* hist[]);
 
 void exitShell (char* path);

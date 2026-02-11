@@ -10,14 +10,12 @@ char* loadEnvironment () {
   printf("Loading environment...\n");
   char* path = getenv("PATH");
   char* home = getenv("HOME");
+  
   chdir(home);
   return path;
 }
 
 char** parseInput(char buffer[]) {
-  // removes new line from end of buffer
-  buffer[strcspn(buffer, "\n")] = 0;
-  
   char delims[] = " \t|><&;";
   int i = 0;
 
@@ -51,7 +49,7 @@ void execute (char* args[]) {
   }
 }
 
-void executeBuiltIn (char* args[]) {
+void executeBuiltIn (char* args[], char* history[]) {
   char* cmds[] = { "cd", "getpath", "setpath" };
   
   void (*builtIns[])(char**) = { cd, getPath, setPath };
@@ -59,6 +57,9 @@ void executeBuiltIn (char* args[]) {
   for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
       builtIns[i](args);
+    } else if (strcmp(args[0], "history") == 0) {
+      listHistory(args, history);
+      break;
     }
   }
 }
@@ -98,27 +99,49 @@ void cd (char* args[]) {
   else if (chdir(args[1]) != 0) perror(args[1]);
 }
 
-char* history (char* arg, char* hist[]) {
+int calculateHistoryIndex(char* arg, int length) {
+  int n = 0;
+  if (strcmp(arg, "!!") == 0) {
+    n = 1;
+  } else if (length == 2 || (length == 3 && arg[1] == '-')) {
+    n = arg[length-1] - '0';
+  } else if (length == 3 || length == 4){
+    n = (arg[length-2] - '0') * 10 + (arg[length-1] - '0');
+  } else {
+    return 0;
+  }
+
+  if (arg[1] == '-' || (arg[2] == '0' && arg[1] == '-')) {
+    n = 20 - n;
+  }
+
+  printf("n: %d\n", n);
+  
+  return n;
+}
+
+char* invokeHistory (char* arg, char* hist[]) {
   int n = 0;
   
-  if (strlen(arg) == 2) {
-    n = arg[1] - '0';
-  } else if (strlen(arg) == 3) {
-    n = (arg[1]-'0') * 10 + (arg[2]-'0');
-  }
+  n = calculateHistoryIndex(arg, strlen(arg));
   
-  if (n < 1 || n > 20) {
-    printf("Error: History must be from 1 to 20\n");
-  }
-  else {
+  if (n < -19 || n == 0 ||  n > 20) {
+    printf("Error: History must be from -19 to 20\n");
+  } else if (strcmp(hist[n-1], "") == 0) {
+    printf("Error: No history for that index\n");
+  } else {
     return hist[n-1];
   }
   
-  return "exit";
+  return "";
 }
 
-void listHistory (char* args[]) {
-  printf("nothing\n");
+void listHistory (char* args[], char* hist[]) {
+  int i = 0;
+  while (strcmp(hist[i], "") != 0) {
+    printf("%d: %s\n", i+1, hist[i]);
+    i++;
+  }
 }
 
 void exitShell (char* path) {

@@ -6,28 +6,30 @@
 #include <string.h>
 #include "shellfunc.h"
 
+// Uses getenv function so we can initialise variables for the path and home directory
 char* loadEnvironment () {
   printf("Loading environment...\n");
   char* path = getenv("PATH");
   char* home = getenv("HOME");
   
-  chdir(home);
+  chdir(home); // Changes directory to the home directory
   return path;
 }
 
+// Parses user input and tokenises it
 char** parseInput(char buffer[]) {
-  char delims[] = " \t|><&;";
+  char delims[] = " \t|><&;";  // Delimiters for parsing
   int i = 0;
 
   char** token = malloc (sizeof(char*)*50);
-  token[i] = strtok(buffer,delims);
+  token[i] = strtok(buffer,delims); // Tokenised input stored in array, each index starts after delimiter
 
   while(token[i] != NULL){
     i++;
-    token[i] = strtok(NULL, delims);
+    token[i] = strtok(NULL, delims); // Append NULL to end of token array so we have clear end point
   }
 
-  // DO NOT DELETE - handles seg fault and stops everything from breaking C:
+/* DO NOT DELETE - handles seg fault and stops everything from breaking C: <- make sure to remove do not delete comment before project submission :p */
   if (token[0] == NULL) {
     token[0] = "";
   }
@@ -35,24 +37,26 @@ char** parseInput(char buffer[]) {
   return token;
 }
 
+// Executes command; passed in as parameter
 void execute (char* args[]) {
   pid_t p = fork(); // gets the id of child process, parent process > 0, child will always be 0, error is -1
 
-  if (p > 0) { // checks for parent process
+  if (p > 0) { // Checks for parent process
     wait(NULL);
-  } else if (p == 0) { // checks for child process
+  } else if (p == 0) { // Checks for child process
     execvp(args[0], args);
     perror(args[0]);
     exit(1);
-  } else { // error
+  } else { // Error
     printf("Something went wrong\n");
   }
 }
 
+// Executes built in command; passed in as parameter
 void executeBuiltIn (char* args[], char* history[]) {
-  char* cmds[] = { "cd", "getpath", "setpath" };
+  char* cmds[] = { "cd", "getpath", "setpath" }; // Array containing built in commands
   
-  void (*builtIns[])(char**) = { cd, getPath, setPath };
+  void (*builtIns[])(char**) = { cd, getPath, setPath }; // Array containing pointers to built-ins
   
   for (int i = 0; i < 3; i++) {
     if (strcmp(args[0], cmds[i]) == 0) {
@@ -73,7 +77,7 @@ void getPath (char* args[]) {
   }
 }
 
-// overwrites what stored in PATH with users input
+// Overwrites what stored in PATH with users input
 void setPath (char* args[]) {
   if (args[1] == NULL) {
     printf("Error: No parameter provided, please enter a path\n");
@@ -86,19 +90,13 @@ void setPath (char* args[]) {
 
 // cd command, changes working directory
 void cd (char* args[]) { 
-  // create home variable using getenv, this is the user's home path.
-  char* home = getenv("HOME");
-  
-  // if the input directory is empty, set working directory to home variable. 
-  if (args[1] == NULL) chdir(home);
-  
-  // checks case of user entering two paths, prints error.
+  char* home = getenv("HOME"); // User's home path
+  if (args[1] == NULL) chdir(home); // No argument case, cd to home path
   else if (args[2]) printf ("Too many arguments \n");
-  
-  // otherwise, change directory to input directory, if it is unsuccesful, print using syscall value w/ perror()
-  else if (chdir(args[1]) != 0) perror(args[1]);
+  else if (chdir(args[1]) != 0) perror(args[1]); // Descriptive error prints using perror 
 }
 
+// Calculates history index <<<< not quite sure how to comment this function and it's contents
 int calculateHistoryIndex(char* arg, int length) {
   int n = 0;
   if (strcmp(arg, "!!") == 0) {
@@ -120,6 +118,7 @@ int calculateHistoryIndex(char* arg, int length) {
   return n;
 }
 
+// Invokes history, oncemore unsure about this one
 char* invokeHistory (char* arg, char* hist[]) {
   int n = 0;
   
@@ -136,6 +135,7 @@ char* invokeHistory (char* arg, char* hist[]) {
   return "";
 }
 
+// Prints full history(?)
 void listHistory (char* args[], char* hist[]) {
   int i = 0;
   while (strcmp(hist[i], "") != 0) {
@@ -144,9 +144,10 @@ void listHistory (char* args[], char* hist[]) {
   }
 }
 
+// Exits shell
 void exitShell (char* path) {
   setenv("PATH", path, 1);
-  printf("%s\n", getenv("PATH"));
+  printf("%s\n", getenv("PATH")); 
   printf("exiting...\n");
   exit(0);
 }

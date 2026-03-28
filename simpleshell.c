@@ -53,13 +53,25 @@ int main (void) {
     }
     
     //check for aliased command
-    char* aliasCmd = parsed[0];
-    if (strcmp(parsed[0], "unalias") != 0 && strcmp(parsed[0], "alias") != 0) {
-      aliasCmd = invokeAlias(parsed);
+    char* aliasCmd;
+    for (int i = 0; i < 3; i++) {
+      aliasCmd = parsed[0];
+      if (strcmp(parsed[0], "unalias") != 0 && strcmp(parsed[0], "alias") != 0) {
+	aliasCmd = invokeAlias(parsed);
+      }
+      
+      if (aliasCmd != parsed[0]) {
+	strcpy(buffer, aliasCmd);
+	parsed = parseInput(buffer); //reparse alias command
+      }
     }
-    if (aliasCmd != parsed[0]) {
-      strcpy(buffer, aliasCmd);
-      parsed = parseInput(buffer); //reparse alias command
+    
+    if (strcspn("!", parsed[0]) == 0) {
+      char* historyCmd = invokeHistory(parsed);
+      if (strcmp(historyCmd, "") != 0) {
+	strcpy(buffer, historyCmd);
+	parsed = parseInput(buffer); //reparse history command
+      } 
     }
     
     if (strcmp(parsed[0], "exit") == 0 && parsed[1] != NULL) {
